@@ -3,8 +3,7 @@ const express = require("express");
 const dialogflow = require("dialogflow");
 const OpenAIAPI = require('openai');
 
-const projectId = process.env.PROJECT_ID 
-const uuid = require('uuid');
+
 
 //Initialize OpenAI API with the secret key
 const openai = new OpenAIAPI(process.env.OPENAI_API_KEY);
@@ -26,7 +25,7 @@ const askGPT = async (question) => {
   return gptResponse.choices[0].message;
 }
 
-const runSample = async () => {
+const runSample = async (message, projectId) => {
     // A unique identifier for the given session
   const sessionId = uuid.v4();
 
@@ -40,7 +39,7 @@ const runSample = async () => {
     queryInput: {
       text: {
         // The query to send to the dialogflow agent
-        text: 'I love you',
+        text: message,
         // The language used by the client (en-US)
         languageCode: 'en-US',
       },
@@ -55,18 +54,20 @@ const runSample = async () => {
   const action = responses[0].queryResult.action;
   if (action == "input.unknown"){
     const new_result = await askGPT(queryText);
-    return {
-      user: queryText,
-      bot: new_result
-    }
+    // return {
+    //   user: queryText,
+    //   bot: new_result
+    // }
+    return new_result;
   }
 
 
   if (result) {
-        return {
-            user: queryText,
-            bot: result
-        }
+        // return {
+        //     user: queryText,
+        //     bot: result
+        // }
+        return result;
 }else{
     return Error("No intent matched")
 }
