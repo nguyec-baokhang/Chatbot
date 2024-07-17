@@ -51,10 +51,11 @@ const handleEvent = async (event) => {
           switch (event.message.type) {
               case 'text':
                   const response = await runSample(event.message.text,projectId);
+                  const result = response.content;
                   // you will get response from DF here
               return client.replyMessage(event.replyToken, {
                 type: 'text',
-                text: (response+'~yu')
+                text: (result+'~yu')
               });
           }
       }
